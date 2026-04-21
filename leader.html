@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Questions for Leader</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Enterprise Services Leaders</p>
+      <h1 id="page-title">Questions for Leader</h1>
+      <p class="subtitle">Add your question below and it will be saved to the leader's shared list.</p>
+    </div>
+    <a class="secondary-button" href="index.html">Back to Directory</a>
+  </header>
+
+  <section class="selected-panel">
+    <div class="profile-card">
+      <img id="leader-image" alt="Leader image" class="leader-profile-image">
+      <div class="profile-copy">
+        <h2 id="leader-name">Leader Name</h2>
+        <p id="leader-dept">Department</p>
+        <div id="question-input-area" class="question-panel">
+          <div class="input-row">
+            <input id="question-input" placeholder="Type your question">
+            <button id="add-question-btn" class="primary-button">Add Question</button>
+          </div>
+          <p id="question-limit-msg" class="limit-message"></p>
+        </div>
+      </div>
+    </div>
+
+    <ul id="questions-container" class="questions-list"></ul>
+  </section>
+
+  <script type="module" src="leader.js"></script>
+</body>
+</html>

@@ -61,27 +61,72 @@ const leaderImages = {
   16: "Images for Leaders/Shaofeng Zhu.jpg"
 };
 
-const leadersContainer = document.getElementById("leaders-container");
+const pageTitle = document.getElementById("page-title");
+const leaderImageEl = document.getElementById("leader-image");
+const leaderNameEl = document.getElementById("leader-name");
+const leaderDeptEl = document.getElementById("leader-dept");
+const questionsContainer = document.getElementById("questions-container");
+const questionInput = document.getElementById("question-input");
+const addBtn = document.getElementById("add-question-btn");
+const limitMsg = document.getElementById("question-limit-msg");
 
-function createLeaderCards() {
-  leaders.forEach(leader => {
-    const card = document.createElement("div");
-    card.className = "leader-card";
-    card.dataset.leaderId = leader.id;
+const urlParams = new URLSearchParams(window.location.search);
+const leaderId = parseInt(urlParams.get('leaderId'));
+const leader = leaders.find(l => l.id === leaderId);
 
-    const img = document.createElement("img");
-    img.src = leaderImages[leader.id];
-    img.alt = `${leader.name} portrait`;
-
-    const button = document.createElement("a");
-    button.className = "leader-card-button";
-    button.href = `leader.html?leaderId=${leader.id}`;
-    button.textContent = leader.name;
-
-    card.append(img, button);
-    leadersContainer.appendChild(card);
-  });
+if (!leader) {
+  alert("Leader not found");
+  window.location.href = "index.html";
 }
 
-createLeaderCards();
+pageTitle.textContent = `Questions for ${leader.name}`;
+leaderImageEl.src = leaderImages[leader.id];
+leaderNameEl.textContent = leader.name;
+leaderDeptEl.textContent = leader.dept;
 
+const q = query(collection(db, "questions"), where("leaderId", "==", leaderId));
+onSnapshot(q, snapshot => {
+  console.log("Snapshot received, docs count:", snapshot.size);
+  questionsContainer.innerHTML = "";
+
+  if (snapshot.empty) {
+    const emptyMessage = document.createElement("li");
+    emptyMessage.className = "no-questions";
+    emptyMessage.textContent = "No questions have been added for this leader yet.";
+    questionsContainer.appendChild(emptyMessage);
+    return;
+  }
+
+  snapshot.forEach(doc => {
+    const li = document.createElement("li");
+    li.textContent = doc.data().text;
+    questionsContainer.appendChild(li);
+  });
+}, error => {
+  console.error("Snapshot error:", error);
+});
+
+addBtn.addEventListener("click", async () => {
+  const text = questionInput.value.trim();
+  if (!text) return;
+
+  const snap = await getDocs(q);
+
+  if (snap.size >= 15) {
+    limitMsg.textContent = "Maximum of 15 questions reached.";
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "questions"), {
+      leaderId: leaderId,
+      text
+    });
+    console.log("Question added successfully");
+    questionInput.value = "";
+    limitMsg.textContent = "";
+  } catch (error) {
+    console.error("Error adding question:", error);
+    limitMsg.textContent = "Failed to add question. Check console for details.";
+  }
+});

@@ -19,22 +19,22 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const leaders = [
-  { id: 1, name: "Christian Lim" },
-  { id: 2, name: "Michelle Tay" },
-  { id: 3, name: "Emisukri Abdul Rahman" },
-  { id: 4, name: "Danny Boey" },
-  { id: 5, name: "Steven Er" },
-  { id: 6, name: "Judy Loh" },
-  { id: 7, name: "Chee Wee Tan" },
-  { id: 8, name: "Francis Tan" },
-  { id: 9, name: "Vince Tan" },
-  { id: 10, name: "Ajith Thadiyil Vidyadharan" },
-  { id: 11, name: "Yung Yeow Wong" },
-  { id: 12, name: "Hong Eng Yap" },
-  { id: 13, name: "Hendra Setiawan" },
-  { id: 14, name: "Ming Wen Yang" },
-  { id: 15, name: "Lawrence Ong" },
-  { id: 16, name: "Shaofeng Zhu" }
+  { id: 1, name: "Christian Lim", dept: "Enterprise Services" },
+  { id: 2, name: "Michelle Tay", dept: "Enterprise Services" },
+  { id: 3, name: "Emisukri Abdul Rahman", dept: "Enterprise Services" },
+  { id: 4, name: "Danny Boey", dept: "Enterprise Services" },
+  { id: 5, name: "Steven Er", dept: "Enterprise Services" },
+  { id: 6, name: "Judy Loh", dept: "Enterprise Services" },
+  { id: 7, name: "Chee Wee Tan", dept: "Enterprise Services" },
+  { id: 8, name: "Francis Tan", dept: "Enterprise Services" },
+  { id: 9, name: "Vince Tan", dept: "Enterprise Services" },
+  { id: 10, name: "Ajith Thadiyil Vidyadharan", dept: "Enterprise Services" },
+  { id: 11, name: "Yung Yeow Wong", dept: "Enterprise Services" },
+  { id: 12, name: "Hong Eng Yap", dept: "Enterprise Services" },
+  { id: 13, name: "Hendra Setiawan", dept: "Enterprise Services" },
+  { id: 14, name: "Ming Wen Yang", dept: "Enterprise Services" },
+  { id: 15, name: "Lawrence Ong", dept: "Enterprise Services" },
+  { id: 16, name: "Shaofeng Zhu", dept: "Enterprise Services" }
 ];
 
 const leaderImages = {
@@ -57,11 +57,6 @@ const leaderImages = {
 };
 
 const summaryContainer = document.getElementById("summary-container");
-const leaderDetails = document.getElementById("leader-details");
-const summaryTitle = document.getElementById("summary-selected-title");
-const summaryDescription = document.getElementById("summary-selected-description");
-const summaryQuestionsList = document.getElementById("summary-questions-list");
-let activeSummaryCard = null;
 
 function renderCards(summaryData) {
   summaryContainer.innerHTML = "";
@@ -69,46 +64,30 @@ function renderCards(summaryData) {
   leaders.forEach(leader => {
     const card = document.createElement("div");
     card.className = "summary-card";
+    card.style.cursor = "pointer";
+    card.addEventListener("click", () => {
+      window.location.href = `questions.html?leaderId=${leader.id}`;
+    });
 
     const img = document.createElement("img");
     img.src = leaderImages[leader.id];
     img.alt = `${leader.name} portrait`;
 
+    const dept = document.createElement("p");
+    dept.textContent = leader.dept;
+    dept.className = "dept-text";
+
     const count = summaryData[leader.id]?.length || 0;
-    const text = document.createElement("p");
-    text.textContent = `${count} question${count === 1 ? "" : "s"}`;
-    text.className = "empty-card";
+    const questionsText = document.createElement("p");
+    questionsText.textContent = `${count} questions`;
+    questionsText.className = "questions-count";
 
-    const link = document.createElement("a");
-    link.className = "summary-action-button";
-    link.href = `index.html?leaderId=${leader.id}`;
-    link.textContent = `View ${leader.name}`;
+    const name = document.createElement("p");
+    name.textContent = leader.name;
+    name.className = "leader-name";
 
-    card.append(img, text, link);
+    card.append(img, dept, questionsText, name);
     summaryContainer.appendChild(card);
-  });
-}
-
-function showLeaderQuestions(leader, questions) {
-  leaderDetails.classList.remove("hidden");
-  summaryTitle.textContent = `${leader.name} Questions`;
-  summaryDescription.textContent = questions.length
-    ? `${questions.length} question${questions.length === 1 ? "" : "s"} have been submitted for this leader.`
-    : "No questions have been submitted yet. Select a leader in the main app to add one.";
-
-  summaryQuestionsList.innerHTML = "";
-  if (questions.length === 0) {
-    const emptyMessage = document.createElement("li");
-    emptyMessage.className = "no-questions";
-    emptyMessage.textContent = "No questions available for this leader.";
-    summaryQuestionsList.appendChild(emptyMessage);
-    return;
-  }
-
-  questions.forEach(text => {
-    const li = document.createElement("li");
-    li.textContent = text;
-    summaryQuestionsList.appendChild(li);
   });
 }
 

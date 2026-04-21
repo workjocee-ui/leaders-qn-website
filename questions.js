@@ -1,10 +1,7 @@
-// ✅ Firebase imports (MODULAR SDK)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import {
   getFirestore,
   collection,
-  addDoc,
-  onSnapshot,
   query,
   where,
   getDocs
@@ -61,27 +58,44 @@ const leaderImages = {
   16: "Images for Leaders/Shaofeng Zhu.jpg"
 };
 
-const leadersContainer = document.getElementById("leaders-container");
+const pageTitle = document.getElementById("page-title");
+const leaderImageEl = document.getElementById("leader-image");
+const leaderNameEl = document.getElementById("leader-name");
+const leaderDeptEl = document.getElementById("leader-dept");
+const questionsList = document.getElementById("questions-list");
 
-function createLeaderCards() {
-  leaders.forEach(leader => {
-    const card = document.createElement("div");
-    card.className = "leader-card";
-    card.dataset.leaderId = leader.id;
+const urlParams = new URLSearchParams(window.location.search);
+const leaderId = parseInt(urlParams.get('leaderId'));
+const leader = leaders.find(l => l.id === leaderId);
 
-    const img = document.createElement("img");
-    img.src = leaderImages[leader.id];
-    img.alt = `${leader.name} portrait`;
+if (!leader) {
+  alert("Leader not found");
+  window.location.href = "summary.html";
+}
 
-    const button = document.createElement("a");
-    button.className = "leader-card-button";
-    button.href = `leader.html?leaderId=${leader.id}`;
-    button.textContent = leader.name;
+pageTitle.textContent = `Questions for ${leader.name}`;
+leaderImageEl.src = leaderImages[leader.id];
+leaderNameEl.textContent = leader.name;
+leaderDeptEl.textContent = leader.dept;
 
-    card.append(img, button);
-    leadersContainer.appendChild(card);
+async function loadQuestions() {
+  const q = query(collection(db, "questions"), where("leaderId", "==", leaderId));
+  const snapshot = await getDocs(q);
+
+  questionsList.innerHTML = "";
+
+  if (snapshot.empty) {
+    const li = document.createElement("li");
+    li.textContent = "No questions have been submitted for this leader yet.";
+    questionsList.appendChild(li);
+    return;
+  }
+
+  snapshot.forEach((doc, index) => {
+    const li = document.createElement("li");
+    li.textContent = doc.data().text;
+    questionsList.appendChild(li);
   });
 }
 
-createLeaderCards();
-
+loadQuestions();

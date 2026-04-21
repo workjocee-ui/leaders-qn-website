@@ -269,3 +269,56 @@ input {
     max-width: 100%;
   }
 }
+
+/* Summary card styles */
+.summary-card .dept-text {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.summary-card .questions-count {
+  margin: 0.25rem 0;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.summary-card .leader-name {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Questions page styles */
+.questions-layout {
+  grid-template-columns: 1fr minmax(260px, 320px);
+  align-items: start;
+}
+
+.leader-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.questions-section {
+  margin-top: 2rem;
+}
+
+.questions-section h3 {
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.numbered-questions {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.numbered-questions li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(148,163,184,0.14);
+}
+
+.numbered-questions li:last-child {
+  border-bottom: none;
+}
