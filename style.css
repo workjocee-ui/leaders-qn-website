@@ -271,7 +271,8 @@ input {
 }
 
 /* Summary card styles */
-.summary-card .dept-text {
+.summary-card .dept-text,
+.leader-card .dept-text {
   margin: 0.5rem 0 0;
   color: var(--muted);
   font-size: 0.9rem;
@@ -302,16 +303,32 @@ input {
 
 .questions-section {
   margin-top: 2rem;
+  background: var(--surface-alt);
+  border: 1px solid rgba(148,163,184,0.16);
+  border-radius: 20px;
+  padding: 1.5rem 1.75rem;
 }
 
 .questions-section h3 {
-  margin-bottom: 1rem;
+  margin: 0 0 1rem;
   color: var(--text);
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
 }
 
 .numbered-questions {
   list-style: decimal;
   padding-left: 1.5rem;
+  margin: 0;
+}
+
+.numbered-questions li {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(148,163,184,0.14);
+}
+
+.numbered-questions li:last-child {
+  border-bottom: none;
 }
 
 .numbered-questions li {

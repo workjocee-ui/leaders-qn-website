@@ -73,12 +73,16 @@ function createLeaderCards() {
     img.src = leaderImages[leader.id];
     img.alt = `${leader.name} portrait`;
 
+    const dept = document.createElement("p");
+    dept.className = "dept-text";
+    dept.textContent = `Dept: ${leader.dept}`;
+
     const button = document.createElement("a");
     button.className = "leader-card-button";
     button.href = `leader.html?leaderId=${leader.id}`;
     button.textContent = leader.name;
 
-    card.append(img, button);
+    card.append(img, dept, button);
     leadersContainer.appendChild(card);
   });
 }
