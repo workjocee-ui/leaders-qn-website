@@ -65,6 +65,7 @@ const pageTitle = document.getElementById("page-title");
 const leaderImageEl = document.getElementById("leader-image");
 const leaderNameEl = document.getElementById("leader-name");
 const leaderDeptEl = document.getElementById("leader-dept");
+const questionsTitle = document.getElementById("questions-title");
 const questionsContainer = document.getElementById("questions-container");
 const questionInput = document.getElementById("question-input");
 const addBtn = document.getElementById("add-question-btn");
@@ -83,6 +84,7 @@ pageTitle.textContent = `Questions for ${leader.name}`;
 leaderImageEl.src = leaderImages[leader.id];
 leaderNameEl.textContent = leader.name;
 leaderDeptEl.textContent = leader.dept;
+questionsTitle.textContent = "Questions:";
 
 const q = query(collection(db, "questions"), where("leaderId", "==", leaderId));
 onSnapshot(q, snapshot => {
