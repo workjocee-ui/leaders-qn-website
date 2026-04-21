@@ -287,6 +287,18 @@ input {
 .summary-card .leader-name {
   margin: 0;
   font-weight: 600;
+  background: var(--accent);
+  color: #ffffff;
+  padding: 0.9rem 1.25rem;
+  border-radius: 999px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.summary-card .leader-name:hover {
+  background: var(--accent-dark);
+  transform: translateY(-1px);
 }
 
 /* Questions page styles */
