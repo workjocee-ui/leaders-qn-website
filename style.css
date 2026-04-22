@@ -405,3 +405,10 @@ input {
 .top-voted-header {
   color: #d97706 !important; /* Gold/Orange emphasis for top questions */
 }
+
+.vote-instructions {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
