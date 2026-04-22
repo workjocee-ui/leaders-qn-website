@@ -10,6 +10,8 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
+import { leaders, leaderImages } from "./data.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDQw63fhm4CUuxkQBzendZrr7mf1YSiDaA",
   authDomain: "leaders-question-app.firebaseapp.com",
@@ -22,8 +24,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-import { leaders, leaderImages } from "./data.js";
 
 const leadersContainer = document.getElementById("leaders-container");
 
