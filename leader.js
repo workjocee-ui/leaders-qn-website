@@ -90,7 +90,7 @@ onSnapshot(q, (snapshot) => {
     voteCount.textContent = `${questionData.upvotes || 0} votes`;
 
     const upvoteBtn = document.createElement("button");
-    upvoteBtn.textContent = "▲ Upvote";
+    upvoteBtn.textContent = "▲ Vote Me!";
     upvoteBtn.className = "upvote-btn";
     
     // Upvote click logic

@@ -1,19 +1,20 @@
 // data.js
 export const leaders = [
-  { id: 1, name: "Christian Lim", dept: "Telco and SGO Ops" },
-  { id: 2, name: "Michelle Tay", dept: "Enterprise Services" },
-  { id: 3, name: "Emisukri Abdul Rahman", dept: "Enterprise Services" },
-  { id: 4, name: "Danny Boey", dept: "Enterprise Services" },
-  { id: 5, name: "Judy Loh", dept: "Enterprise Services" },
-  { id: 6, name: "Chee Wee Tan", dept: "Enterprise Services" },
-  { id: 7, name: "Francis Tan", dept: "Enterprise Services" },
-  { id: 8, name: "Vince Tan", dept: "Enterprise Services" },
-  { id: 9, name: "Ajith Thadiyil Vidyadharan", dept: "Enterprise Services" },
-  { id: 10, name: "Yung Yeow Wong", dept: "Enterprise Services" },
-  { id: 11, name: "Hendra Setiawan", dept: "Enterprise Services" },
-  { id: 12, name: "Ming Wen Yang", dept: "Enterprise Services" },
-  { id: 13, name: "Lawrence Ong", dept: "Enterprise Services" },
-  { id: 14, name: "Shaofeng Zhu", dept: "Enterprise Services" }
+  { id: 1, name: "Christian Lim", dept: "Telco Infrastructure and SGO Operations" },
+  { id: 2, name: "Michelle Tay", dept: "Service & Process Assurance" },
+  { id: 3, name: "Emisukri Abdul Rahman", dept: "Order Management and Global Service Provisioning" },
+  { id: 4, name: "Danny Boey", dept: "CEA for SATS, Nestle and Carrier Sales" },
+  { id: 5, name: "Judy Loh", dept: "CEA Senior Service Delivery Director" },
+  { id: 6, name: "Chee Wee Tan", dept: "Project Management for Govt" },
+  { id: 7, name: "Francis Tan", dept: "Integrated Tech Sve & Support" },
+  { id: 8, name: "Vince Tan", dept: "CEA Singapore, China" },
+  { id: 9, name: "Ajith Thadiyil Vidyadharan", dept: "Cyber Defence & Automation" },
+  { id: 10, name: "Yung Yeow Wong", dept: "Integrated Cloud & System , Shared Infra , T3, SDWAN" },
+  { id: 11, name: "Hendra Setiawan", dept: "Tier 3 , SDWAN , IOT" },
+  { id: 12, name: "Ming Wen Yang", dept: "Security Sve Delivery" },
+  { id: 13, name: "Lawrence Ong", dept: "MSS • Cyber Defence & Automation" },
+  { id: 14, name: "Shaofeng Zhu", dept: "System Integrated Cloud , Platform and System" },
+  { id: 15, name: "Hong Eng Yap", dept: "Singapore Mobile Enterprise Operations" }
 ];
 
 export const leaderImages = {
@@ -30,5 +31,6 @@ export const leaderImages = {
   11: "Images for Leaders/Hendra Setiawan.jpg",
   12: "Images for Leaders/Ming Wen Yang.jpg",
   13: "Images for Leaders/Lawrence Ong.jpg",
-  14: "Images for Leaders/Shaofeng Zhu.jpg"
+  14: "Images for Leaders/Shaofeng Zhu.jpg",
+  15: "Images for Leaders/Hong Eng Yap.jpg"
 };
