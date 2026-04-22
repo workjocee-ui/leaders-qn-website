@@ -1,4 +1,4 @@
-// ✅ Firebase imports (MODULAR SDK)
+// leader.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import {
   getFirestore,
@@ -7,10 +7,12 @@ import {
   onSnapshot,
   query,
   where,
-  getDocs
+  getDocs,
+  doc,          // Add this
+  updateDoc,    // Add this
+  increment     // Add this
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// ✅ Import centralized data
 import { leaders, leaderImages } from "./data.js";
 
 const firebaseConfig = {
@@ -26,7 +28,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// DOM Elements
 const pageTitle = document.getElementById("page-title");
 const leaderImageEl = document.getElementById("leader-image");
 const leaderNameEl = document.getElementById("leader-name");
@@ -37,11 +38,8 @@ const questionInput = document.getElementById("question-input");
 const addBtn = document.getElementById("add-question-btn");
 const limitMsg = document.getElementById("question-limit-msg");
 
-// Get leaderId from URL
 const urlParams = new URLSearchParams(window.location.search);
 const leaderId = parseInt(urlParams.get('leaderId'));
-
-// Find the leader in the imported data
 const leader = leaders.find(l => l.id === leaderId);
 
 if (!leader) {
@@ -49,18 +47,15 @@ if (!leader) {
   window.location.href = "index.html";
 }
 
-// Update UI with leader details
 pageTitle.textContent = `Questions for ${leader.name}`;
 leaderImageEl.src = leaderImages[leader.id];
 leaderNameEl.textContent = leader.name;
 leaderDeptEl.textContent = leader.dept;
 questionsTitle.textContent = "Questions:";
 
-// Setup real-time listener for questions
 const q = query(collection(db, "questions"), where("leaderId", "==", leaderId));
 
 onSnapshot(q, (snapshot) => {
-  console.log("Snapshot received, docs count:", snapshot.size);
   questionsContainer.innerHTML = "";
 
   if (snapshot.empty) {
@@ -71,23 +66,57 @@ onSnapshot(q, (snapshot) => {
     return;
   }
 
-  snapshot.forEach((doc) => {
+  // Convert snapshot to array so we can sort by upvotes on the user page too
+  const questionsArray = [];
+  snapshot.forEach((docSnap) => {
+    questionsArray.push({ id: docSnap.id, ...docSnap.data() });
+  });
+
+  // Sort descending by upvotes
+  questionsArray.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
+
+  questionsArray.forEach((questionData) => {
     const li = document.createElement("li");
-    li.textContent = doc.data().text;
+    li.className = "question-item";
+
+    const textSpan = document.createElement("span");
+    textSpan.textContent = questionData.text;
+
+    const voteContainer = document.createElement("div");
+    voteContainer.className = "vote-container";
+
+    const voteCount = document.createElement("span");
+    voteCount.className = "vote-count";
+    voteCount.textContent = `${questionData.upvotes || 0} votes`;
+
+    const upvoteBtn = document.createElement("button");
+    upvoteBtn.textContent = "▲ Upvote";
+    upvoteBtn.className = "upvote-btn";
+    
+    // Upvote click logic
+    upvoteBtn.addEventListener("click", async () => {
+      try {
+        const questionRef = doc(db, "questions", questionData.id);
+        await updateDoc(questionRef, {
+          upvotes: increment(1)
+        });
+      } catch (error) {
+        console.error("Error upvoting:", error);
+      }
+    });
+
+    voteContainer.append(voteCount, upvoteBtn);
+    li.append(textSpan, voteContainer);
     questionsContainer.appendChild(li);
   });
-}, (error) => {
-  console.error("Snapshot error:", error);
 });
 
-// Event listener for adding a question
 addBtn.addEventListener("click", async () => {
   const text = questionInput.value.trim();
   if (!text) return;
 
   const snap = await getDocs(q);
 
-  // Check if the limit of 15 questions has been reached
   if (snap.size >= 15) {
     limitMsg.textContent = "Maximum of 15 questions reached.";
     return;
@@ -97,9 +126,9 @@ addBtn.addEventListener("click", async () => {
     await addDoc(collection(db, "questions"), {
       leaderId: leaderId,
       text: text,
-      timestamp: new Date() // Useful for sorting later if needed
+      timestamp: new Date(),
+      upvotes: 0 // Initialize upvotes to 0
     });
-    console.log("Question added successfully");
     questionInput.value = "";
     limitMsg.textContent = "";
   } catch (error) {

@@ -1,3 +1,4 @@
+// questions.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import {
   getFirestore,
@@ -26,6 +27,7 @@ const pageTitle = document.getElementById("page-title");
 const leaderImageEl = document.getElementById("leader-image");
 const leaderNameEl = document.getElementById("leader-name");
 const leaderDeptEl = document.getElementById("leader-dept");
+const topQuestionsList = document.getElementById("top-questions-list");
 const questionsList = document.getElementById("questions-list");
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -46,6 +48,7 @@ async function loadQuestions() {
   const q = query(collection(db, "questions"), where("leaderId", "==", leaderId));
   const snapshot = await getDocs(q);
 
+  topQuestionsList.innerHTML = "";
   questionsList.innerHTML = "";
 
   if (snapshot.empty) {
@@ -55,9 +58,28 @@ async function loadQuestions() {
     return;
   }
 
-  snapshot.forEach((doc, index) => {
+  // Load into an array to sort manually
+  let allQuestions = [];
+  snapshot.forEach(doc => {
+    allQuestions.push({ id: doc.id, ...doc.data() });
+  });
+
+  // Sort by highest upvotes
+  allQuestions.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
+
+  // Split into Top 3 and the Rest
+  const top3 = allQuestions.slice(0, 3);
+  const theRest = allQuestions.slice(3);
+
+  top3.forEach((q) => {
     const li = document.createElement("li");
-    li.textContent = doc.data().text;
+    li.innerHTML = `<strong>${q.text}</strong> <span class="vote-badge">${q.upvotes || 0} votes</span>`;
+    topQuestionsList.appendChild(li);
+  });
+
+  theRest.forEach((q) => {
+    const li = document.createElement("li");
+    li.innerHTML = `${q.text} <span class="vote-badge">${q.upvotes || 0} votes</span>`;
     questionsList.appendChild(li);
   });
 }
