@@ -127,7 +127,7 @@ addBtn.addEventListener("click", async () => {
       leaderId: leaderId,
       text: text,
       timestamp: new Date(),
-      upvotes: 1 // Initialize upvotes to 0
+      upvotes: 0 // Initialize upvotes to 0
     });
     questionInput.value = "";
     limitMsg.textContent = "";
